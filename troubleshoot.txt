@@ -1,0 +1,690 @@
+# 🔧 Troubleshooting Guide
+
+## Quick Diagnostic Commands
+
+Run these first to check your environment:
+
+```bash
+# Check Python version (need 3.8+)
+python3 --version
+
+# Check Node version (need 16+)
+node --version
+
+# Check npm
+npm --version
+
+# Check if ports are free
+lsof -i :8000  # Should be empty
+lsof -i :5173  # Should be empty
+```
+
+---
+
+## 🚨 Common Errors & Solutions
+
+### Error 1: "command not found: python3"
+
+**Problem:** Python not installed
+
+**Solution:**
+```bash
+# Install Python via Homebrew
+brew install python3
+
+# OR download from python.org
+open https://www.python.org/downloads/
+```
+
+---
+
+### Error 2: "command not found: npm"
+
+**Problem:** Node.js not installed
+
+**Solution:**
+```bash
+# Install Node.js via Homebrew
+brew install node
+
+# OR download from nodejs.org
+open https://nodejs.org/
+```
+
+---
+
+### Error 3: "ModuleNotFoundError: No module named 'fastapi'"
+
+**Problem:** Virtual environment not activated or dependencies not installed
+
+**Solution:**
+```bash
+cd backend
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+### Error 16: "React is not defined"
+
+**Problem:** React import missing
+
+**Solution:**
+
+Check `src/App.jsx` has at top:
+```javascript
+import { useState, useEffect } from 'react';
+```
+
+Check `src/main.jsx` has:
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+```
+
+---
+
+### Error 17: Data not showing after clicking "Analyze Profile"
+
+**Problem:** API call failing silently
+
+**Solution:**
+
+1. **Open browser console (F12)**
+   - Look for red errors
+   - Check Network tab for failed requests
+
+2. **Check backend logs for errors**
+
+3. **Verify profile data format:**
+```javascript
+// In browser console
+console.log(profile)
+// Should show: {age: 25, gender: "Male", weight: 70, height: 175, goal: "General Fitness"}
+```
+
+4. **Test API manually:**
+```bash
+curl -X POST http://localhost:8000/api/profile \
+  -H "Content-Type: application/json" \
+  -d '{"age":25,"gender":"Male","weight":70,"height":175,"goal":"General Fitness"}'
+```
+
+---
+
+### Error 18: "pandas.errors.ParserError" when loading CSV
+
+**Problem:** CSV file corrupted or wrong format
+
+**Solution:**
+
+1. **Check CSV file integrity:**
+```bash
+cd backend
+head -5 exercise_dataset.csv  # Should show headers and data
+```
+
+2. **Check for encoding issues:**
+```bash
+file exercise_dataset.csv  # Should show UTF-8 or ASCII
+```
+
+3. **Re-download CSV files from source if corrupted**
+
+---
+
+### Error 19: Slow model training (taking minutes)
+
+**Problem:** Large dataset or slow machine
+
+**Solution:**
+
+1. **First run takes longer (30-60 seconds)** - this is normal
+2. **Subsequent runs use cached models** - should be instant
+
+3. **To verify models are cached:**
+```bash
+cd backend
+ls -la models/
+# Should see: rec_tree.joblib, cal_rf.joblib, meta_info.joblib
+```
+
+---
+
+### Error 20: "npm ERR! code ERESOLVE"
+
+**Problem:** Dependency conflict
+
+**Solution:**
+```bash
+cd frontend
+rm -rf node_modules package-lock.json
+npm install --legacy-peer-deps
+```
+
+---
+
+## 🔍 Debugging Tips
+
+### Check Backend Status
+
+```bash
+# Test root endpoint
+curl http://localhost:8000/
+
+# Test goals endpoint
+curl http://localhost:8000/api/goals
+
+# Test metrics
+curl http://localhost:8000/api/metrics
+
+# Check backend logs (look for errors)
+# Just read the terminal where backend is running
+```
+
+### Check Frontend Status
+
+```bash
+# View build output
+cd frontend
+npm run build
+
+# Check for TypeScript errors (if any)
+# Look at terminal where "npm run dev" is running
+```
+
+### Browser Developer Tools
+
+1. **Open DevTools:** Press `F12` or `Cmd+Option+I` (Mac)
+
+2. **Console Tab:**
+   - Look for red errors
+   - Check for "404" or "500" errors
+
+3. **Network Tab:**
+   - Click "Analyze Profile" button
+   - Watch for API calls
+   - Click on failed requests to see details
+
+4. **Elements Tab:**
+   - Verify HTML structure is rendering
+   - Check if Tailwind classes are applied
+
+---
+
+## 📊 Performance Issues
+
+### Backend is slow
+
+```bash
+# Check CPU usage
+top
+
+# Reduce model complexity in main.py:
+# Change: RandomForestRegressor(n_estimators=150, ...)
+# To:     RandomForestRegressor(n_estimators=50, ...)
+
+# Change: DecisionTreeClassifier(max_depth=8, ...)
+# To:     DecisionTreeClassifier(max_depth=5, ...)
+```
+
+### Frontend is slow
+
+```bash
+# Clear browser cache
+# Use production build
+cd frontend
+npm run build
+npm run preview  # Runs optimized version
+```
+
+---
+
+## 🗂️ File Structure Verification
+
+Run this to verify everything is in place:
+
+```bash
+cd "/Volumes/WD_2TB/Projects/college fitness"
+
+echo "=== Checking Backend ==="
+ls -la backend/main.py
+ls -la backend/requirements.txt
+ls -la backend/*.csv
+ls -la backend/venv/
+
+echo "=== Checking Frontend ==="
+ls -la frontend/package.json
+ls -la frontend/src/App.jsx
+ls -la frontend/src/main.jsx
+ls -la frontend/vite.config.js
+ls -la frontend/tailwind.config.js
+```
+
+**Expected output:** All files should exist (no "No such file" errors)
+
+---
+
+## 🔄 Fresh Start (Nuclear Option)
+
+If nothing works, start completely fresh:
+
+```bash
+cd "/Volumes/WD_2TB/Projects/college fitness"
+
+# Backup CSV files
+cp *.csv ~/Desktop/
+
+# Delete everything
+rm -rf backend frontend
+
+# Start over following the setup guide
+# Copy CSV files back from Desktop
+```
+
+---
+
+## 🆘 Still Stuck?
+
+### Check Logs Systematically
+
+1. **Backend logs:**
+   - Look at terminal where `python main.py` is running
+   - Copy any red errors
+
+2. **Frontend logs:**
+   - Look at terminal where `npm run dev` is running
+   - Copy any red errors
+
+3. **Browser console:**
+   - Press F12 → Console tab
+   - Copy any red errors
+
+### Test Individual Components
+
+```bash
+# Test Python environment
+cd backend
+source venv/bin/activate
+python -c "import fastapi; print('FastAPI OK')"
+python -c "import pandas; print('Pandas OK')"
+python -c "import sklearn; print('Scikit-learn OK')"
+
+# Test Node environment
+cd frontend
+node -v  # Should show version
+npm -v   # Should show version
+```
+
+### Verify Data Files
+
+```bash
+cd backend
+
+# Check CSV files exist and have content
+wc -l *.csv
+# Should show line counts for each file
+
+# Check first few lines
+head -3 exercise_dataset.csv
+head -3 fitness_and_workout_dataset.csv
+head -3 Indian_Food_Nutrition_Processed.csv
+```
+
+---
+
+## 📝 Common Mistakes Checklist
+
+- [ ] Forgot to activate virtual environment (`source venv/bin/activate`)
+- [ ] Running commands from wrong directory
+- [ ] Backend not started before frontend
+- [ ] Ports 8000 or 5173 already in use
+- [ ] CSV files not in backend directory
+- [ ] App.jsx not saved after editing
+- [ ] Forgot to restart servers after code changes
+- [ ] Browser cache not cleared
+- [ ] Wrong API_URL in App.jsx
+- [ ] Missing Tailwind directives in index.css
+
+---
+
+## ✅ Health Check Commands
+
+Run these to verify everything is working:
+
+```bash
+# 1. Check Python
+python3 --version
+
+# 2. Check Node
+node --version
+
+# 3. Check backend is running
+curl http://localhost:8000/
+
+# 4. Check frontend is running
+curl http://localhost:5173/
+
+# 5. Check virtual env is active
+which python  # Should point to venv
+
+# 6. Check all dependencies
+cd backend && pip list
+cd frontend && npm list --depth=0
+
+# 7. Check ports
+lsof -i :8000
+lsof -i :5173
+```
+
+---
+
+## 🎯 Success Indicators
+
+You know everything is working when:
+
+✅ Backend terminal shows: `INFO: Uvicorn running on http://0.0.0.0:8000`  
+✅ Frontend terminal shows: `Local: http://localhost:5173/`  
+✅ Browser shows the app with gradient UI  
+✅ No red errors in browser console (F12)  
+✅ Can click "Analyze Profile" and see results  
+✅ All 4 tabs work (Profile, Workouts, Calories, Nutrition)  
+✅ Models folder created in backend with .joblib files  
+
+---
+
+## 🚀 Pro Debugging Tips
+
+### Enable Verbose Logging
+
+**Backend (main.py):**
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
+
+**Frontend (App.jsx):**
+```javascript
+// Add this at the top of functions
+console.log('Debug:', variableName);
+```
+
+### Monitor Network Traffic
+
+```bash
+# Watch backend requests in real-time
+# In backend terminal, you'll see:
+INFO:     127.0.0.1:xxxx - "POST /api/profile HTTP/1.1" 200 OK
+```
+
+### Test API with Postman/Thunder Client
+
+Instead of using the frontend, test backend directly:
+
+```bash
+# Using curl
+curl -X POST http://localhost:8000/api/profile \
+  -H "Content-Type: application/json" \
+  -d '{
+    "age": 25,
+    "gender": "Male",
+    "weight": 70,
+    "height": 175,
+    "goal": "General Fitness"
+  }'
+```
+
+---
+
+## 📧 Last Resort
+
+If you've tried everything:
+
+1. Take screenshots of all error messages
+2. Copy exact error text from terminals
+3. Note which step failed
+4. Check if CSV files are correctly formatted
+5. Verify macOS version compatibility
+
+Most issues are resolved by:
+- Activating virtual environment
+- Installing dependencies properly
+- Starting backend before frontend
+- Clearing browser cache
+
+**Happy debugging! 🐛→✨** venv/bin/activate  # You should see (venv) in prompt
+pip install -r requirements.txt
+```
+
+**Verify:**
+```bash
+pip list | grep fastapi  # Should show fastapi version
+```
+
+---
+
+### Error 4: "FileNotFoundError: exercise_dataset.csv"
+
+**Problem:** CSV files not in backend directory
+
+**Solution:**
+```bash
+cd backend
+ls -la *.csv  # Check what files exist
+
+# If missing, copy from parent directory
+cp ../exercise_dataset.csv .
+cp ../fitness_and_workout_dataset.csv .
+cp ../Indian_Food_Nutrition_Processed.csv .
+
+# Verify all 3 are there
+ls -la *.csv
+```
+
+---
+
+### Error 5: "EADDRINUSE: address already in use :::8000"
+
+**Problem:** Port 8000 already in use
+
+**Solution:**
+```bash
+# Find and kill process on port 8000
+lsof -ti:8000 | xargs kill -9
+
+# Or use different port in main.py:
+# Change: uvicorn.run(app, host="0.0.0.0", port=8000)
+# To:     uvicorn.run(app, host="0.0.0.0", port=8001)
+```
+
+---
+
+### Error 6: "EADDRINUSE: address already in use :::5173"
+
+**Problem:** Port 5173 already in use
+
+**Solution:**
+```bash
+# Kill process on port 5173
+lsof -ti:5173 | xargs kill -9
+
+# Or start on different port
+npm run dev -- --port 3000
+```
+
+---
+
+### Error 7: "Access to fetch at 'http://localhost:8000' from origin 'http://localhost:5173' has been blocked by CORS policy"
+
+**Problem:** CORS not configured properly
+
+**Solution:**
+
+Check `backend/main.py` has CORS middleware:
+```python
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+**Restart backend after changes**
+
+---
+
+### Error 8: "Module not found: Error: Can't resolve 'axios'"
+
+**Problem:** Frontend dependencies not installed
+
+**Solution:**
+```bash
+cd frontend
+npm install
+npm install axios lucide-react
+```
+
+---
+
+### Error 9: Blank white screen in browser
+
+**Problem:** Multiple possible causes
+
+**Solutions:**
+
+1. **Check browser console (F12 → Console tab)**
+   - Look for red errors
+
+2. **Verify backend is running:**
+   ```bash
+   curl http://localhost:8000/
+   # Should return JSON
+   ```
+
+3. **Check frontend terminal for errors**
+
+4. **Hard refresh browser:**
+   - Mac: `Cmd + Shift + R`
+   - Windows: `Ctrl + Shift + R`
+
+5. **Clear browser cache:**
+   - Chrome: Settings → Privacy → Clear browsing data
+
+---
+
+### Error 10: "Cannot find module './App.jsx'"
+
+**Problem:** App.jsx file not created or in wrong location
+
+**Solution:**
+```bash
+cd frontend/src
+ls -la App.jsx  # Should exist
+
+# If not, create it and paste the React code
+nano App.jsx
+```
+
+**Verify path:** `/Volumes/WD_2TB/Projects/college fitness/frontend/src/App.jsx`
+
+---
+
+### Error 11: Tailwind classes not working
+
+**Problem:** Tailwind not configured properly
+
+**Solution:**
+
+1. **Check tailwind.config.js exists:**
+```bash
+cd frontend
+cat tailwind.config.js
+```
+
+2. **Verify src/index.css has:**
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+3. **Reinstall Tailwind:**
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+4. **Restart dev server:**
+```bash
+npm run dev
+```
+
+---
+
+### Error 12: "Network Error" when clicking buttons
+
+**Problem:** Backend not running or wrong URL
+
+**Solution:**
+
+1. **Check backend is running:**
+   ```bash
+   # In backend terminal, should see:
+   INFO:     Uvicorn running on http://0.0.0.0:8000
+   ```
+
+2. **Test backend manually:**
+   ```bash
+   curl http://localhost:8000/api/goals
+   # Should return JSON with goals
+   ```
+
+3. **Check API_URL in App.jsx:**
+   ```javascript
+   const API_URL = 'http://localhost:8000';  // Verify this line
+   ```
+
+---
+
+### Error 13: Models not training / "joblib module not found"
+
+**Problem:** Missing dependencies
+
+**Solution:**
+```bash
+cd backend
+source venv/bin/activate
+pip install joblib scikit-learn pandas numpy
+```
+
+---
+
+### Error 14: "Permission denied" when running scripts
+
+**Problem:** Scripts not executable
+
+**Solution:**
+```bash
+chmod +x setup.sh
+chmod +x start_backend.sh
+chmod +x start_frontend.sh
+chmod +x start_all.sh
+```
+
+---
+
+### Error 15: Virtual environment activation fails
+
+**Problem:** Virtual environment corrupted
+
+**Solution:**
+```bash
+cd backend
+rm -rf venv  # Delete old venv
+python3 -m venv venv  # Create fresh one
+source

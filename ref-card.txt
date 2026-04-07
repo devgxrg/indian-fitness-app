@@ -1,0 +1,363 @@
+# 🚀 Quick Reference Card
+
+## One-Liner Setup
+
+```bash
+cd "/Volumes/WD_2TB/Projects/college fitness" && chmod +x setup.sh && ./setup.sh
+```
+
+---
+
+## Essential Commands
+
+### Backend Commands
+```bash
+# Navigate
+cd "/Volumes/WD_2TB/Projects/college fitness/backend"
+
+# Activate environment
+source venv/bin/activate
+
+# Start server
+python main.py
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Check if running
+curl http://localhost:8000/
+```
+
+### Frontend Commands
+```bash
+# Navigate
+cd "/Volumes/WD_2TB/Projects/college fitness/frontend"
+
+# Start dev server
+npm run dev
+
+# Install dependencies
+npm install
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+---
+
+## Quick Start (Daily Use)
+
+**Terminal 1:**
+```bash
+cd "/Volumes/WD_2TB/Projects/college fitness/backend"
+source venv/bin/activate
+python main.py
+```
+
+**Terminal 2:**
+```bash
+cd "/Volumes/WD_2TB/Projects/college fitness/frontend"
+npm run dev
+```
+
+**Browser:** http://localhost:5173
+
+---
+
+## Port Management
+
+```bash
+# Check ports
+lsof -i :8000  # Backend
+lsof -i :5173  # Frontend
+
+# Kill process on port
+lsof -ti:8000 | xargs kill -9  # Backend
+lsof -ti:5173 | xargs kill -9  # Frontend
+```
+
+---
+
+## File Locations
+
+```
+Backend:
+  Main: /Volumes/WD_2TB/Projects/college fitness/backend/main.py
+  CSVs: /Volumes/WD_2TB/Projects/college fitness/backend/*.csv
+  Venv: /Volumes/WD_2TB/Projects/college fitness/backend/venv/
+
+Frontend:
+  App:  /Volumes/WD_2TB/Projects/college fitness/frontend/src/App.jsx
+  CSS:  /Volumes/WD_2TB/Projects/college fitness/frontend/src/index.css
+  Config: /Volumes/WD_2TB/Projects/college fitness/frontend/vite.config.js
+```
+
+---
+
+## API Endpoints
+
+```
+GET  /                     - Health check
+GET  /api/goals           - List fitness goals
+GET  /api/exercises       - List exercises
+GET  /api/foods           - List foods
+GET  /api/metrics         - Model performance
+POST /api/profile         - Analyze profile
+POST /api/calories        - Estimate calories
+POST /api/food-log        - Log food
+POST /api/meal-plan       - Generate meal plan
+GET  /api/goal-activities/{goal} - Activities by goal
+```
+
+---
+
+## Testing Endpoints
+
+```bash
+# Health check
+curl http://localhost:8000/
+
+# Get goals
+curl http://localhost:8000/api/goals
+
+# Test profile analysis
+curl -X POST http://localhost:8000/api/profile \
+  -H "Content-Type: application/json" \
+  -d '{"age":25,"gender":"Male","weight":70,"height":175,"goal":"General Fitness"}'
+
+# Test calorie estimation
+curl -X POST http://localhost:8000/api/calories \
+  -H "Content-Type: application/json" \
+  -d '{"age":25,"gender":"Male","weight":70,"height":175,"exercise":"Running","duration":30}'
+```
+
+---
+
+## Troubleshooting Quick Fixes
+
+```bash
+# Virtual env not activated
+source backend/venv/bin/activate
+
+# Dependencies missing
+cd backend && pip install -r requirements.txt
+cd frontend && npm install
+
+# Port in use
+lsof -ti:8000 | xargs kill -9
+lsof -ti:5173 | xargs kill -9
+
+# Clear cache
+rm -rf backend/models/
+rm -rf frontend/node_modules/
+rm frontend/package-lock.json
+
+# Restart fresh
+cd backend && source venv/bin/activate && python main.py
+cd frontend && npm run dev
+
+# Browser cache
+Cmd + Shift + R (Mac)
+Ctrl + Shift + R (Windows)
+```
+
+---
+
+## Environment Check
+
+```bash
+# Check versions
+python3 --version  # Need 3.8+
+node --version     # Need 16+
+npm --version      # Should be installed
+
+# Check files
+ls backend/*.csv   # Should show 3 CSV files
+ls backend/main.py # Should exist
+ls frontend/src/App.jsx  # Should exist
+
+# Check virtual env
+cd backend
+source venv/bin/activate
+which python  # Should show path to venv
+```
+
+---
+
+## Browser DevTools
+
+```
+F12                    - Open DevTools
+Cmd + Option + I       - Open DevTools (Mac)
+Cmd + Shift + R        - Hard refresh (Mac)
+Ctrl + Shift + R       - Hard refresh (Windows)
+
+Tabs to check:
+  Console   - JavaScript errors
+  Network   - API calls
+  Elements  - HTML/CSS inspection
+```
+
+---
+
+## Project Structure
+
+```
+college fitness/
+├── backend/
+│   ├── main.py               ← FastAPI app
+│   ├── requirements.txt      ← Python deps
+│   ├── venv/                 ← Virtual env
+│   ├── models/               ← ML models (auto-generated)
+│   ├── exercise_dataset.csv
+│   ├── fitness_and_workout_dataset.csv
+│   └── Indian_Food_Nutrition_Processed.csv
+│
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx          ← Main React component
+│   │   ├── main.jsx         ← Entry point
+│   │   └── index.css        ← Tailwind imports
+│   ├── package.json
+│   ├── vite.config.js
+│   └── tailwind.config.js
+│
+├── start_backend.sh
+├── start_frontend.sh
+└── start_all.sh
+```
+
+---
+
+## Dependencies
+
+**Backend (Python):**
+- fastapi==0.104.1
+- uvicorn==0.24.0
+- pandas==2.1.3
+- numpy==1.26.2
+- scikit-learn==1.3.2
+- joblib==1.3.2
+
+**Frontend (npm):**
+- react ^18.2.0
+- vite ^5.0.8
+- axios ^1.6.2
+- lucide-react ^0.294.0
+- tailwindcss ^3.3.6
+
+---
+
+## Git Commands (Optional)
+
+```bash
+# Initialize repo
+git init
+git add .
+git commit -m "Initial commit"
+
+# Create .gitignore
+cat > .gitignore << 'EOF'
+backend/venv/
+backend/models/
+backend/__pycache__/
+frontend/node_modules/
+frontend/dist/
+.DS_Store
+*.pyc
+EOF
+```
+
+---
+
+## Performance Tips
+
+- First run: Models train (30-60s)
+- Subsequent: Models cached (instant)
+- Clear models: `rm -rf backend/models/`
+- Production build: `cd frontend && npm run build`
+
+---
+
+## URLs to Remember
+
+```
+Frontend Dev:  http://localhost:5173
+Backend API:   http://localhost:8000
+API Docs:      http://localhost:8000/docs  (FastAPI auto-docs)
+```
+
+---
+
+## Common Shortcuts
+
+**Start everything:**
+```bash
+./start_all.sh
+```
+
+**Stop everything:**
+```
+Ctrl + C (in each terminal)
+```
+
+**Restart backend:**
+```bash
+# In backend terminal: Ctrl + C, then ↑, Enter
+```
+
+**Restart frontend:**
+```bash
+# In frontend terminal: Ctrl + C, then ↑, Enter
+```
+
+---
+
+## Success Checklist
+
+- [ ] Backend shows: "Uvicorn running on http://0.0.0.0:8000"
+- [ ] Frontend shows: "Local: http://localhost:5173/"
+- [ ] Browser loads app with gradient UI
+- [ ] Can fill and submit profile form
+- [ ] See workout recommendations
+- [ ] Calculate calories
+- [ ] Generate meal plan
+- [ ] No errors in browser console
+
+---
+
+## Emergency Reset
+
+```bash
+cd "/Volumes/WD_2TB/Projects/college fitness"
+
+# Backend reset
+rm -rf backend/venv backend/models
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Frontend reset
+rm -rf frontend/node_modules frontend/package-lock.json
+cd frontend
+npm install
+
+# Restart servers
+```
+
+---
+
+## Resources
+
+- FastAPI Docs: https://fastapi.tiangolo.com
+- React Docs: https://react.dev
+- Tailwind Docs: https://tailwindcss.com
+- Vite Docs: https://vitejs.dev
+
+---
+
+**Keep this card handy! 📌**
