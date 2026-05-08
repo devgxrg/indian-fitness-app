@@ -246,8 +246,6 @@ npm run preview  # Runs optimized version
 Run this to verify everything is in place:
 
 ```bash
-cd "/Volumes/WD_2TB/Projects/college fitness"
-
 echo "=== Checking Backend ==="
 ls -la backend/main.py
 ls -la backend/requirements.txt
@@ -271,8 +269,6 @@ ls -la frontend/tailwind.config.js
 If nothing works, start completely fresh:
 
 ```bash
-cd "/Volumes/WD_2TB/Projects/college fitness"
-
 # Backup CSV files
 cp *.csv ~/Desktop/
 
@@ -590,7 +586,7 @@ ls -la App.jsx  # Should exist
 nano App.jsx
 ```
 
-**Verify path:** `/Volumes/WD_2TB/Projects/college fitness/frontend/src/App.jsx`
+**Verify path:** `frontend/src/App.jsx`
 
 ---
 

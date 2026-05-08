@@ -3,7 +3,7 @@
 ## One-Liner Setup
 
 ```bash
-cd "/Volumes/WD_2TB/Projects/college fitness" && chmod +x setup.sh && ./setup.sh
+chmod +x setup.sh && ./setup.sh
 ```
 
 ---
@@ -13,7 +13,7 @@ cd "/Volumes/WD_2TB/Projects/college fitness" && chmod +x setup.sh && ./setup.sh
 ### Backend Commands
 ```bash
 # Navigate
-cd "/Volumes/WD_2TB/Projects/college fitness/backend"
+cd backend
 
 # Activate environment
 source venv/bin/activate
@@ -31,7 +31,7 @@ curl http://localhost:8000/
 ### Frontend Commands
 ```bash
 # Navigate
-cd "/Volumes/WD_2TB/Projects/college fitness/frontend"
+cd frontend
 
 # Start dev server
 npm run dev
@@ -52,14 +52,14 @@ npm run preview
 
 **Terminal 1:**
 ```bash
-cd "/Volumes/WD_2TB/Projects/college fitness/backend"
+cd backend
 source venv/bin/activate
 python main.py
 ```
 
 **Terminal 2:**
 ```bash
-cd "/Volumes/WD_2TB/Projects/college fitness/frontend"
+cd frontend
 npm run dev
 ```
 
@@ -85,14 +85,14 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 
 ```
 Backend:
-  Main: /Volumes/WD_2TB/Projects/college fitness/backend/main.py
-  CSVs: /Volumes/WD_2TB/Projects/college fitness/backend/*.csv
-  Venv: /Volumes/WD_2TB/Projects/college fitness/backend/venv/
+  Main: backend/main.py
+  CSVs: backend/*.csv
+  Venv: backend/venv/
 
 Frontend:
-  App:  /Volumes/WD_2TB/Projects/college fitness/frontend/src/App.jsx
-  CSS:  /Volumes/WD_2TB/Projects/college fitness/frontend/src/index.css
-  Config: /Volumes/WD_2TB/Projects/college fitness/frontend/vite.config.js
+  App:  frontend/src/App.jsx
+  CSS:  frontend/src/index.css
+  Config: frontend/vite.config.js
 ```
 
 ---
@@ -332,8 +332,6 @@ Ctrl + C (in each terminal)
 ## Emergency Reset
 
 ```bash
-cd "/Volumes/WD_2TB/Projects/college fitness"
-
 # Backend reset
 rm -rf backend/venv backend/models
 cd backend
